@@ -8,12 +8,24 @@ public class Breakfast {
     private boolean tradBreakfast;
     private int numOfPeople;
 
+    private int numOfEggs;
+    private int numOfLargeEggs;
+    private float cost;
+
+
     //constructors and overloaded constructors
     Breakfast(){
         partyName ="None";
         bigEaters = false;
         tradBreakfast = false;
         numOfPeople = 0;
+    }
+    Breakfast(boolean bigEaters, int numOfPeople){
+        this.bigEaters = bigEaters;
+        this.numOfPeople = numOfPeople;
+    }
+    Breakfast(String partyName){
+        this.partyName = partyName;
     }
 
     Breakfast(String partyName, boolean bigEaters, boolean tradBreakfast, int numOfPeople){
@@ -57,11 +69,11 @@ public class Breakfast {
     }
 
     //behaviors
-    public void calcEggs(){
-
+    public int calcEggs(){
+        return numOfEggs;
     }
-    public void calcCost(){
-
+    public float calcCost(){
+        return cost;
     }
 
     //toString method
