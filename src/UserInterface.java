@@ -1,15 +1,34 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class UserInterface {
+public class UserInterface implements ActionListener, FocusListener {
     static JFrame frame  = new JFrame();
     static JPanel mainPanel = new JPanel();
     static final int LOGIN_HEIGHT = 350;
     static final int LOGIN_WIDTH = 600;
+    static JTextField usernameField = new JTextField();
+    static JPasswordField passWordField = new JPasswordField();
+    static JButton enterImageButton = new JButton();
+    static JButton loginButton  = new JButton("Log in");
+    static JButton signupButton = new JButton("Sign up");
+    static JFrame loginFrame = new JFrame();
+    static JFrame mainFrame = new JFrame();
+    static JPanel mainFramePanel = new JPanel();
+
+
+
+
+
+
+
     public static void startInterface(){
         try {
             login();
@@ -32,10 +51,9 @@ public class UserInterface {
 
     }
     public static void login() throws IOException {
-        JFrame loginFrame = new JFrame();
         JPanel loginPanel = new JPanel();
         loginFrame.setTitle("Reservation Pro Login");
-        loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         loginFrame.setSize(LOGIN_WIDTH, LOGIN_HEIGHT);
         loginPanel.setLayout(null);
         loginPanel.setBounds(0, 0, LOGIN_WIDTH, LOGIN_HEIGHT);
@@ -45,15 +63,13 @@ public class UserInterface {
         loginLabel.setBounds(190, 40, 300, 30);
         loginLabel.setForeground(Color.WHITE);
         loginPanel.add(loginLabel);
-        JTextField usernameField = new JTextField();
         usernameField.setBounds(80, 80, 350, 40);
         usernameField.setFont(new Font("Serif", Font.PLAIN, 20));
         loginPanel.add(usernameField);
-        JPasswordField passWordField = new JPasswordField();
+        passWordField.addFocusListener(new UserInterface());
         passWordField.setBounds(80, 140, 350, 40);
-        passWordField.setFont(new Font("Serif", Font.PLAIN, 30));
+        passWordField.setFont(new Font("Serif", Font.PLAIN, 25));
         loginPanel.add(passWordField);
-        JButton enterImageButton = new JButton();
         BufferedImage bufferedImage;
 
 
@@ -61,6 +77,7 @@ public class UserInterface {
 
         enterImageButton.setBackground(Color.decode("#3498db"));
         enterImageButton.setBounds(470, 140, 40, 40);
+        enterImageButton.addActionListener(new UserInterface());
         JLabel userNameLabelImage = new JLabel();
 
         userNameLabelImage.setIcon(resizeImage("assets/user.png",40,40));
@@ -77,13 +94,36 @@ public class UserInterface {
         //ImageIcon loadingGif = new ImageIcon("assets/FadingLines.gif").getImage();
         //https://stackoverflow.com/questions/22240328/how-to-draw-a-gif-animation-in-java/22240487#22240487
         loadingLabel.setBounds(100,100,40,40);
+        JLabel signupLabel = new JLabel("Don't have an account? Sign up for one");
+        signupLabel.setBounds(60,190,250,30);
+        loginPanel.add(signupLabel);
+        signupButton.setBounds(60,220,100,30);
+        signupButton.addActionListener(new UserInterface());
+        loginButton.setBounds(400,220,100,30);
+        loginButton.addActionListener(new UserInterface());
+        loginPanel.add(loginButton);
+        loginPanel.add(signupButton);
+
         loginFrame.add(loginPanel);
         loginFrame.setVisible(true);
 
 
     }
+    public static void mainProgram(){
+        System.out.println("main program called");
+        JLayeredPane mainPane = new JLayeredPane();
 
-
+        mainFrame.setSize(800,400);
+        mainFramePanel.setBounds(0,0,800,400);
+        mainFramePanel.setBackground(Color.BLACK);
+        mainFrame.add(mainFramePanel);
+        mainFrame.add(mainFramePanel);
+        mainFrame.setVisible(true);
+        JPanel sidePanel = new JPanel();
+        sidePanel.setLayout(null);
+        sidePanel.setBounds(0,0,300,400);
+        mainFrame.add(sidePanel);
+    }
     public static void displayItems(){
 
 
@@ -93,11 +133,32 @@ public class UserInterface {
     public static Icon resizeImage(String fileURL, int width, int height) throws IOException {
         BufferedImage bufferedImage = ImageIO.read(new File(fileURL));
         Image scaledImage = bufferedImage.getScaledInstance(width, height, Image.SCALE_DEFAULT);
-        Icon returnedIcon = new ImageIcon(scaledImage);
-        return returnedIcon;
+        return new ImageIcon(scaledImage);
     }
 
 
+    @Override
+    public void actionPerformed(ActionEvent e){
+        if(e.getSource() == enterImageButton){
+            System.out.println("logging in");
+        }
+        if(e.getSource() == loginButton){
+            System.out.println("Login button pressed");
+            loginFrame.dispose();
+            mainProgram();
+        }
+        if(e.getSource() == signupButton){
+            System.out.println("Signup button pressed");
+        }
+    }
 
+    @Override
+    public void focusGained(FocusEvent e){
 
+    }
+
+    @Override
+    public void focusLost(FocusEvent e){
+
+    }
 }
