@@ -1,5 +1,12 @@
+import java.util.HashMap;
+
 public class Breakfast {
 
+    enum MenuItem{
+        EGGS_AND_TOAST,
+        PANCAKES,
+        FRENCH_TOAST
+    }
 
 
     //data members
@@ -8,27 +15,43 @@ public class Breakfast {
     private boolean tradBreakfast;
     private int numOfPeople;
 
-    private int numOfEggs;
-    private int numOfLargeEggs;
-    private float cost;
+    final static int eggsPerTrad = 2;
+    final static int eggsPerPancakes = 1;
+
+    final static HashMap<MenuItem, Double[]> ingredientTable = new HashMap<>();
 
 
     //constructors and overloaded constructors
     Breakfast(){
+        makeIngredientTable();
         partyName ="None";
-        bigEaters = false;
-        tradBreakfast = false;
-        numOfPeople = 0;
+        bigEaters = true;
+        tradBreakfast = true;
+        numOfPeople = 4;
+
+
     }
-    Breakfast(boolean bigEaters, int numOfPeople){
-        this.bigEaters = bigEaters;
+    Breakfast(boolean tradBreakfast, int numOfPeople){
+        makeIngredientTable();
+
+        this.tradBreakfast = tradBreakfast;
         this.numOfPeople = numOfPeople;
+        partyName = "null";
+        bigEaters = true;
+
     }
     Breakfast(String partyName){
+        makeIngredientTable();
+
         this.partyName = partyName;
+        bigEaters = true;
+        tradBreakfast = true;
+        numOfPeople = 4;
     }
 
     Breakfast(String partyName, boolean bigEaters, boolean tradBreakfast, int numOfPeople){
+        makeIngredientTable();
+
         this.partyName = partyName;
         this.bigEaters = bigEaters;
         this.tradBreakfast = tradBreakfast;
@@ -48,7 +71,7 @@ public class Breakfast {
         return bigEaters;
     }
 
-    public void setBigEaters(boolean bigEaters) {
+    public void setBigEaters(boolean tradBreakfast) {
         this.bigEaters = bigEaters;
     }
 
@@ -70,15 +93,26 @@ public class Breakfast {
 
     //behaviors
     public int calcEggs(){
-        return numOfEggs;
+        if(tradBreakfast) return bigEaters ? (int) (ingredientTable.get(MenuItem.EGGS_AND_TOAST)[2] * numOfPeople): (int) (ingredientTable.get(MenuItem.EGGS_AND_TOAST)[0] * numOfPeople);
+        else{
+            return bigEaters ? (int) (ingredientTable.get(MenuItem.PANCAKES)[2] * numOfPeople) : (int) (ingredientTable.get(MenuItem.PANCAKES)[0] * numOfPeople);
+        }
     }
     public float calcCost(){
-        return cost;
+        return 0;
     }
+
+    private void makeIngredientTable(){
+        ingredientTable.put(MenuItem.EGGS_AND_TOAST, new Double[]{2.0, 4.99, 3.0, 1.5});
+        ingredientTable.put(MenuItem.PANCAKES, new Double[]{1.0,6.75,2.0,1.5});
+        ingredientTable.put(MenuItem.FRENCH_TOAST, new Double[]{2.0,7.50,3.0,1.5});
+
+    }
+
 
     //toString method
     public String toString(){
-        return "Partyname: "+partyName+" bigEaters: "+bigEaters+" tradBreakfast "+tradBreakfast;
+        return "Party name: "+partyName+" bigEaters: "+bigEaters+" tradBreakfast "+tradBreakfast+" for "+numOfPeople+"people";
     }
 
 
