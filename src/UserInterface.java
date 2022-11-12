@@ -14,15 +14,21 @@ public class UserInterface implements ActionListener, FocusListener {
     static JPanel mainPanel = new JPanel();
     static final int LOGIN_HEIGHT = 350;
     static final int LOGIN_WIDTH = 600;
-    static JTextField usernameField = new JTextField();
-    static JPasswordField passWordField = new JPasswordField();
+    static CoolComponents.RoundJTextField usernameField = new CoolComponents.RoundJTextField(30);
+    static CoolComponents.RoundJTextField userNameSignUpField = new CoolComponents.RoundJTextField(30);
+
+    static JPasswordField passWordField = new CoolComponents.RoundPasswordField(30);
+    static JPasswordField passWordSignUpField = new CoolComponents.RoundPasswordField(30);
+
     static JButton enterImageButton = new JButton();
-    static JButton loginButton  = new JButton("Log in");
+    static JButton loginButton  = new JButton();
     static JButton signupButton = new JButton("Sign up");
     static JFrame loginFrame = new JFrame();
     static JFrame mainFrame = new JFrame();
     static JPanel mainFramePanel = new JPanel();
 
+    static JFrame signUpFrame = new JFrame();
+    static JButton makeAccountButton = new JButton();
 
 
 
@@ -30,6 +36,10 @@ public class UserInterface implements ActionListener, FocusListener {
 
 
     public static void startInterface(){
+        makeAccountButton.addActionListener(new UserInterface());
+        enterImageButton.addActionListener(new UserInterface());
+        signupButton.addActionListener(new UserInterface());
+
         try {
             login();
         } catch (IOException e) {
@@ -51,6 +61,8 @@ public class UserInterface implements ActionListener, FocusListener {
 
     }
     public static void login() throws IOException {
+        usernameField.setText("");
+        passWordField.setText("");
         JPanel loginPanel = new JPanel();
         loginFrame.setTitle("Reservation Pro Login");
         loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -77,7 +89,6 @@ public class UserInterface implements ActionListener, FocusListener {
 
         enterImageButton.setBackground(Color.decode("#3498db"));
         enterImageButton.setBounds(470, 140, 40, 40);
-        enterImageButton.addActionListener(new UserInterface());
         JLabel userNameLabelImage = new JLabel();
 
         userNameLabelImage.setIcon(resizeImage("assets/user.png",40,40));
@@ -98,9 +109,8 @@ public class UserInterface implements ActionListener, FocusListener {
         signupLabel.setBounds(60,190,250,30);
         loginPanel.add(signupLabel);
         signupButton.setBounds(60,220,100,30);
-        signupButton.addActionListener(new UserInterface());
         loginButton.setBounds(400,220,100,30);
-        loginButton.addActionListener(new UserInterface());
+        loginButton.setText("Login");
         loginPanel.add(loginButton);
         loginPanel.add(signupButton);
 
@@ -110,6 +120,7 @@ public class UserInterface implements ActionListener, FocusListener {
 
     }
     public static void mainProgram(){
+
         System.out.println("main program called");
         JLayeredPane mainPane = new JLayeredPane();
 
@@ -123,11 +134,66 @@ public class UserInterface implements ActionListener, FocusListener {
         sidePanel.setLayout(null);
         sidePanel.setBounds(0,0,300,400);
         mainFrame.add(sidePanel);
+
     }
     public static void displayItems(){
 
 
 
+    }
+    public static void signupWindow() throws IOException {
+        userNameSignUpField.setText("");
+        passWordSignUpField.setText("");
+        JPanel signinPanel = new JPanel();
+        signUpFrame.setTitle("Reservation Pro sign up");
+        signUpFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        signUpFrame.setSize(LOGIN_WIDTH, LOGIN_HEIGHT);
+        signinPanel.setLayout(null);
+        signinPanel.setBounds(0, 0, LOGIN_WIDTH, LOGIN_HEIGHT);
+        signinPanel.setBackground(Color.decode("#3498db"));
+        JLabel loginLabel = new JLabel("Sign up");
+        loginLabel.setFont(new Font("Helvetica", Font.BOLD, 25));
+        loginLabel.setBounds(190, 40, 300, 30);
+        loginLabel.setForeground(Color.WHITE);
+        signinPanel.add(loginLabel);
+        userNameSignUpField.setBounds(80, 80, 350, 40);
+        userNameSignUpField.setFont(new Font("Serif", Font.PLAIN, 20));
+        signinPanel.add(usernameField);
+        passWordSignUpField.addFocusListener(new UserInterface());
+        passWordSignUpField.setBounds(80, 140, 350, 40);
+        passWordSignUpField.setFont(new Font("Serif", Font.PLAIN, 25));
+        signinPanel.add(passWordSignUpField);
+
+
+        enterImageButton.setIcon(resizeImage("assets/next.png",40,40));
+
+        enterImageButton.setBackground(Color.decode("#3498db"));
+        enterImageButton.setBounds(470, 140, 40, 40);
+        JLabel userNameLabelImage = new JLabel();
+
+        userNameLabelImage.setIcon(resizeImage("assets/user.png",40,40));
+
+        userNameLabelImage.setBounds(30,80,40,40);
+        signinPanel.add(userNameLabelImage);
+        JLabel passwordLabelImage = new JLabel();
+        passwordLabelImage.setIcon(resizeImage("assets/padlock.png",40,40));
+        passwordLabelImage.setBounds(30,140,40,40);
+        signinPanel.add(passwordLabelImage);
+        signinPanel.add(enterImageButton);
+        JLabel loadingLabel = new JLabel();
+        loadingLabel.setIcon(resizeImage("assets/FadingLines.gif",40,40));
+        //ImageIcon loadingGif = new ImageIcon("assets/FadingLines.gif").getImage();
+        //https://stackoverflow.com/questions/22240328/how-to-draw-a-gif-animation-in-java/22240487#22240487
+        loadingLabel.setBounds(100,100,40,40);
+        makeAccountButton.setBounds(200,220,100,30);
+        makeAccountButton.setText("Sign up ");
+
+
+
+        signinPanel.add(makeAccountButton);
+
+        signUpFrame.add(signinPanel);
+        signUpFrame.setVisible(true);
     }
 
     public static Icon resizeImage(String fileURL, int width, int height) throws IOException {
@@ -139,16 +205,33 @@ public class UserInterface implements ActionListener, FocusListener {
 
     @Override
     public void actionPerformed(ActionEvent e){
-        if(e.getSource() == enterImageButton){
+        if(e.getSource() == enterImageButton || e.getSource() == loginButton){
             System.out.println("logging in");
+            if(Authenticator.Authenticate(usernameField.getText(), String.valueOf(passWordField.getPassword()))){
+                System.out.println("Successful login");
+            }
+            else{
+                System.out.println("Wrong login");
+            }
         }
-        if(e.getSource() == loginButton){
-            System.out.println("Login button pressed");
-            loginFrame.dispose();
-            mainProgram();
+        if(e.getSource() == makeAccountButton){
+            signUpFrame.dispose();
+            try {
+                login();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            Authenticator.makeAccount(usernameField.getText(), String.valueOf(passWordField.getPassword()));
         }
+
         if(e.getSource() == signupButton){
             System.out.println("Signup button pressed");
+            loginFrame.dispose();
+            try {
+                signupWindow();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 

@@ -9,9 +9,10 @@
  *
  */
 public class ClientRequest {
-    public static void main(String args[]) {
+    public static void main(String[] args) {
 
         UserInterface.startInterface();
+
         // Instantiate the different clients (orders)
         Breakfast client1 = new Breakfast();
         Breakfast client2 = new Breakfast("Smith");
