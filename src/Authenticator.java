@@ -38,6 +38,7 @@ public class Authenticator {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        System.out.println("added "+userName+" "+password+" to database");
 
 
     }

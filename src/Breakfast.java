@@ -2,18 +2,24 @@ import java.util.HashMap;
 
 public class Breakfast {
 
-    enum MenuItem{
-        EGGS_AND_TOAST,
-        PANCAKES,
-        FRENCH_TOAST
-    }
+
 
 
     //data members
     private String partyName;
     private boolean bigEaters;
-    private boolean tradBreakfast;
+
+    public MenuItem getMenuItem() {
+        return menuItem;
+    }
+
+    public void setMenuItem(MenuItem menuItem) {
+        this.menuItem = menuItem;
+    }
+
+    private MenuItem menuItem;
     private int numOfPeople;
+    private int orderNumber;
 
     final static int eggsPerTrad = 2;
     final static int eggsPerPancakes = 1;
@@ -26,15 +32,14 @@ public class Breakfast {
         makeIngredientTable();
         partyName ="None";
         bigEaters = true;
-        tradBreakfast = true;
         numOfPeople = 4;
+        orderNumber = 1;
 
 
     }
     Breakfast(boolean tradBreakfast, int numOfPeople){
         makeIngredientTable();
 
-        this.tradBreakfast = tradBreakfast;
         this.numOfPeople = numOfPeople;
         partyName = "null";
         bigEaters = true;
@@ -45,17 +50,18 @@ public class Breakfast {
 
         this.partyName = partyName;
         bigEaters = true;
-        tradBreakfast = true;
         numOfPeople = 4;
+        menuItem = new MenuItem("Unknown", bigEaters);
     }
 
-    Breakfast(String partyName, boolean bigEaters, boolean tradBreakfast, int numOfPeople){
+    Breakfast(String partyName, boolean bigEaters, int numOfPeople, int orderNumber, MenuItem menuItem){
         makeIngredientTable();
 
         this.partyName = partyName;
         this.bigEaters = bigEaters;
-        this.tradBreakfast = tradBreakfast;
         this.numOfPeople = numOfPeople;
+        this.orderNumber = orderNumber;
+        this.menuItem = menuItem;
     }
 
     //getters and setters
@@ -75,13 +81,7 @@ public class Breakfast {
         this.bigEaters = bigEaters;
     }
 
-    public boolean isTradBreakfast() {
-        return tradBreakfast;
-    }
 
-    public void setTradBreakfast(boolean tradBreakfast) {
-        this.tradBreakfast = tradBreakfast;
-    }
 
     public int getNumOfPeople() {
         return numOfPeople;
@@ -93,26 +93,30 @@ public class Breakfast {
 
     //behaviors
     public int calcEggs(){
-        if(tradBreakfast) return bigEaters ? (int) (ingredientTable.get(MenuItem.EGGS_AND_TOAST)[2] * numOfPeople): (int) (ingredientTable.get(MenuItem.EGGS_AND_TOAST)[0] * numOfPeople);
-        else{
-            return bigEaters ? (int) (ingredientTable.get(MenuItem.PANCAKES)[2] * numOfPeople) : (int) (ingredientTable.get(MenuItem.PANCAKES)[0] * numOfPeople);
-        }
+        return bigEaters ? (menuItem.getEggs()+2)*numOfPeople : menuItem.getEggs() * numOfPeople;
+    }
+    public int calcButter(){
+        return bigEaters ? (menuItem.getTbspButter()+2)*numOfPeople : menuItem.getTbspButter() * numOfPeople;
+    }
+    public int calcMilk(){
+        return bigEaters ? (menuItem.getCupsOfMilk()+2)*numOfPeople : menuItem.getCupsOfMilk() * numOfPeople;
     }
     public float calcCost(){
-        return 0;
+        return (float) (bigEaters ? menuItem.getCost()*1.5*numOfPeople : menuItem.getCost()*numOfPeople);
     }
 
     private void makeIngredientTable(){
-        ingredientTable.put(MenuItem.EGGS_AND_TOAST, new Double[]{2.0, 4.99, 3.0, 1.5});
-        ingredientTable.put(MenuItem.PANCAKES, new Double[]{1.0,6.75,2.0,1.5});
-        ingredientTable.put(MenuItem.FRENCH_TOAST, new Double[]{2.0,7.50,3.0,1.5});
+
 
     }
 
 
     //toString method
     public String toString(){
-        return "Party name: "+partyName+" bigEaters: "+bigEaters+" tradBreakfast "+tradBreakfast+" for "+numOfPeople+"people";
+        String portion = bigEaters ? "large" : "regular";
+        String htmlString = "<html><span style=\"font-family:Arial;font-size:13px;\">Reservation :"+partyName+" &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; Guests: " +numOfPeople+
+                "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Portion:"+portion+" <br> Meal: "+menuItem.getName()+" &nbsp;&nbsp;&nbsp;&nbsp; Cost: "+calcCost()+" </html>";
+        return htmlString;
     }
 
 
