@@ -124,7 +124,7 @@ public class UserInterface implements ActionListener, FocusListener {
 
         JPanel topPanel = new JPanel(null);
         topPanel.setBounds(250, 0, 1030, 150);
-        topPanel.setBackground(Color.WHITE);
+        topPanel.setBackground(Color.decode("#7f8c8d"));
         mainFrame.setSize(1280, 720);
         JPanel mainFramePanel = new JPanel(null);
         mainFramePanel.setBounds(0, 150, 1280, 570);
@@ -177,19 +177,21 @@ public class UserInterface implements ActionListener, FocusListener {
         makeReservationButton.setBorderPainted(false);
         makeReservationButton.setFocusPainted(false);
         makeReservationButton.setContentAreaFilled(true);
+        makeReservationButton.setOpaque(true);
         makeReservationButton.setBackground(Color.decode("#95a5a6"));
         JButton reservations = new JButton("Reservations");
         reservations.setBorderPainted(false);
         reservations.setFocusPainted(false);
         reservations.setContentAreaFilled(true);
+        reservations.setOpaque(true);
         reservations.setBackground(Color.decode("#95a5a6"));
         reservations.setBounds(20,160,150,30);
 
         sidePanel.add(reservations);
         JButton addMenuItemButton = new JButton("Add Menu Item");
         addMenuItemButton.setBorderPainted(false);
-        addMenuItemButton.setFocusPainted(false);
-        addMenuItemButton.setContentAreaFilled(true);
+        addMenuItemButton.setContentAreaFilled(false);
+        addMenuItemButton.setOpaque(true);
         addMenuItemButton.setBackground(Color.decode("#95a5a6"));
         addMenuItemButton.setBounds(20,200,150,30);
         sidePanel.add(addMenuItemButton);
@@ -263,7 +265,7 @@ public class UserInterface implements ActionListener, FocusListener {
                 displayMenu(menuItems,menuItems, mainFramePanel, mainPane, mainLabel);
             }
         });
-        scrollBar.setBounds(1250,40,30,700);
+        scrollBar.setBounds(1250,0,30,720);
         scrollBar.addAdjustmentListener(new AdjustmentListener() {
             @Override
             public void adjustmentValueChanged(AdjustmentEvent adjustmentEvent) {
@@ -335,7 +337,10 @@ public class UserInterface implements ActionListener, FocusListener {
                 total.remove(menuItem);
                 displayMenu(total,items, mainPanel, pane, mainLabel);
                 System.out.println(items.size());
-                if(items.size()<5){ scrollBar.setVisible(false);}
+                if(items.size()<5){
+                    scrollBar.setValue(0);
+                    scrollBar.setVisible(false);
+                }
                 else{
                     scrollBar.setVisible(true);
                     scrollBar.setMaximum(items.size()*8);
@@ -551,7 +556,10 @@ public class UserInterface implements ActionListener, FocusListener {
                 breakfasts.remove(breakfast);
                 total.remove(breakfast);
                 displayOrders(breakfasts,breakfasts, mainPanel, pane, mainLabel);
-                if(breakfasts.size()<5){ scrollBar.setVisible(false);}
+                if(breakfasts.size()<5){
+                    scrollBar.setValue(0);
+                    scrollBar.setVisible(false);
+                }
                 else{
                     scrollBar.setVisible(true);
                     scrollBar.setMaximum(breakfasts.size()*8);

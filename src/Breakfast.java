@@ -114,7 +114,7 @@ public class Breakfast {
     //toString method
     public String toString(){
         String portion = bigEaters ? "large" : "regular";
-        String htmlString = "<html><span style=\"font-family:Arial;font-size:13px;\">Reservation :"+partyName+" &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; Guests: " +numOfPeople+
+        String htmlString = "<html><span style=\"font-family:Arial;font-size:13px;\">Reservation: "+partyName+" &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; Guests: " +numOfPeople+
                 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Portion:"+portion+" <br> Meal: "+menuItem.getName()+" &nbsp;&nbsp;&nbsp;&nbsp; Cost: "+calcCost()+" </html>";
         return htmlString;
     }
