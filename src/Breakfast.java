@@ -1,44 +1,32 @@
+import java.awt.*;
 import java.util.HashMap;
 
 public class Breakfast {
 
 
 
-
-    //data members
+    //instance variables
     private String partyName;
     private boolean bigEaters;
 
-    public MenuItem getMenuItem() {
-        return menuItem;
-    }
 
-    public void setMenuItem(MenuItem menuItem) {
-        this.menuItem = menuItem;
-    }
 
     private MenuItem menuItem;
     private int numOfPeople;
-    private int orderNumber;
 
-    final static int eggsPerTrad = 2;
-    final static int eggsPerPancakes = 1;
 
-    final static HashMap<MenuItem, Double[]> ingredientTable = new HashMap<>();
 
 
     //constructors and overloaded constructors
     Breakfast(){
-        makeIngredientTable();
         partyName ="None";
         bigEaters = true;
         numOfPeople = 4;
-        orderNumber = 1;
 
 
     }
     Breakfast(boolean tradBreakfast, int numOfPeople){
-        makeIngredientTable();
+
 
         this.numOfPeople = numOfPeople;
         partyName = "null";
@@ -46,21 +34,20 @@ public class Breakfast {
 
     }
     Breakfast(String partyName){
-        makeIngredientTable();
+
 
         this.partyName = partyName;
         bigEaters = true;
         numOfPeople = 4;
-        menuItem = new MenuItem("Unknown", bigEaters);
+        menuItem = new MenuItem("Unknown");
     }
 
-    Breakfast(String partyName, boolean bigEaters, int numOfPeople, int orderNumber, MenuItem menuItem){
-        makeIngredientTable();
+    //important constructor with all parameters
+    Breakfast(String partyName, boolean bigEaters, int numOfPeople, MenuItem menuItem){
 
         this.partyName = partyName;
         this.bigEaters = bigEaters;
         this.numOfPeople = numOfPeople;
-        this.orderNumber = orderNumber;
         this.menuItem = menuItem;
     }
 
@@ -81,7 +68,34 @@ public class Breakfast {
         this.bigEaters = bigEaters;
     }
 
+    public Color getColor() {
+        return color;
+    }
 
+    public void setColor(Color color) {
+        this.color = color;
+        setColor = true;
+    }
+
+    private Color color;
+
+    public boolean isSetColor() {
+        return setColor;
+    }
+
+    public void setSetColor(boolean setColor) {
+        this.setColor = setColor;
+    }
+
+    private boolean setColor = false;
+
+    public MenuItem getMenuItem() {
+        return menuItem;
+    }
+
+    public void setMenuItem(MenuItem menuItem) {
+        this.menuItem = menuItem;
+    }
 
     public int getNumOfPeople() {
         return numOfPeople;
@@ -91,7 +105,7 @@ public class Breakfast {
         this.numOfPeople = numOfPeople;
     }
 
-    //behaviors
+    //calculate stuff based on whether it's a large portion and the amount of people. (i really like the ternary operator)
     public int calcEggs(){
         return bigEaters ? (menuItem.getEggs()+2)*numOfPeople : menuItem.getEggs() * numOfPeople;
     }
@@ -105,16 +119,15 @@ public class Breakfast {
         return (float) (bigEaters ? menuItem.getCost()*1.5*numOfPeople : menuItem.getCost()*numOfPeople);
     }
 
-    private void makeIngredientTable(){
 
 
-    }
 
-
-    //toString method
+    //toString method which didnt end up getting used due to spacing issues which weren't figured out
     public String toString(){
         String portion = bigEaters ? "large" : "regular";
-        String htmlString = "<html><span style=\"font-family:Arial;font-size:13px;\">Reservation: "+partyName+" &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; Guests: " +numOfPeople+
+        String centeringString = "&nbsp;".repeat(10-partyName.length());
+
+        String htmlString = "<html><span style=\"font-family:Arial;font-size:13px;\">Reservation: "+partyName+ centeringString +numOfPeople+
                 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Portion:"+portion+" <br> Meal: "+menuItem.getName()+" &nbsp;&nbsp;&nbsp;&nbsp; Cost: "+calcCost()+" </html>";
         return htmlString;
     }

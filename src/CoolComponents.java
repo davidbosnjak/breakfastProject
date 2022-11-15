@@ -4,34 +4,33 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
 
 public class CoolComponents {
-
+    //some of this code was taken from the internet because as a wise man once said "Why do something when someone has already done it". I will still explain what the code does
     static class RoundedPanel extends JPanel
     {
-        /** Stroke size. it is recommended to set it to 1 for better view */
+
         protected int strokeSize = 1;
-        /** Color of shadow */
+
         protected Color shadowColor = Color.black;
-        /** Sets if it drops shadow */
+
         protected boolean shady = true;
-        /** Sets if it has an High Quality view */
         protected boolean highQuality = true;
-        /** Double values for Horizontal and Vertical radius of corner arcs */
+        //this instance variable is important. it sets how rounded it will be
         protected Dimension arcs = new Dimension(20, 20);
-        /** Distance between shadow border and opaque panel border */
         protected int shadowGap = 5;
-        /** The offset of shadow.  */
         protected int shadowOffset = 4;
-        /** The transparency value of shadow. ( 0 - 255) */
         protected int shadowAlpha = 150;
+        //i made this constructor which takes in the only useful instance variable in my opinion
         RoundedPanel(int roundAmount){
+            //setting opaque to false because things get messed up if i dont
             setOpaque(false);
             arcs.height = roundAmount;
             arcs.width = roundAmount;
         }
 
-        //FOLLOWING CODES GOES HERE
+        //this method overrides the method from the JPanel class which paints the component,
         @Override
         protected void paintComponent(Graphics g) {
+            //call JPanels paintComponet method
             super.paintComponent(g);
             int width = getWidth();
             int height = getHeight();
@@ -40,13 +39,13 @@ public class CoolComponents {
                     shadowColor.getGreen(), shadowColor.getBlue(), shadowAlpha);
             Graphics2D graphics = (Graphics2D) g;
 
-            //Sets antialiasing if HQ.
+
             if (highQuality) {
                 graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                         RenderingHints.VALUE_ANTIALIAS_ON);
             }
 
-            //Draws shadow borders if any.
+            //this draws shadows
             if (shady) {
                 graphics.setColor(shadowColorA);
                 graphics.fillRoundRect(
@@ -59,7 +58,7 @@ public class CoolComponents {
                 shadowGap = 1;
             }
 
-            //Draws the rounded opaque panel with borders.
+            //draw an arc in parts of the JLabel to give it that rounded look
             graphics.setColor(getBackground());
             graphics.fillRoundRect(0, 0, width - shadowGap,
                     height - shadowGap, arcs.width, arcs.height);
@@ -68,7 +67,6 @@ public class CoolComponents {
             graphics.drawRoundRect(0, 0, width - shadowGap,
                     height - shadowGap, arcs.width, arcs.height);
 
-            //Sets strokes to default, is better.
             graphics.setStroke(new BasicStroke());
         }
 
@@ -83,12 +81,13 @@ public class CoolComponents {
         private int cornerRadius;
         public RoundJTextField(int cornerRadius) {
             this.cornerRadius = cornerRadius;
-            setOpaque(false); // As suggested by @AVD in comment.
+            setOpaque(false);
             backgroundColor = Color.WHITE;
 
         }
         @Override
         protected void paintComponent(Graphics g) {
+            //same idea as the previous one
             Graphics2D graphics = (Graphics2D) g;
 
             graphics.setColor(backgroundColor);
@@ -98,8 +97,7 @@ public class CoolComponents {
             int height = getHeight();
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            //Draws the rounded panel with borders.
-
+            //draws rounded rectangle with the appropriate arc size
             graphics.fillRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height); //paint background
             graphics.drawRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height); //paint border
             super.paintComponent(g);
@@ -121,10 +119,11 @@ public class CoolComponents {
         private Shape shape;
         private int cornerRadius;
         public RoundPasswordField(int cornerRadius) {
-            setOpaque(false); // As suggested by @AVD in comment.
+            setOpaque(false);
             this.cornerRadius = cornerRadius;
         }
         protected void paintComponent(Graphics g) {
+            //same idea
             Graphics2D graphics = (Graphics2D) g;
 
             graphics.setColor(getBackground());
@@ -134,7 +133,6 @@ public class CoolComponents {
             int height = getHeight();
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            //Draws the rounded panel with borders.
 
             graphics.fillRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height); //paint background
             super.paintComponent(g);
@@ -152,43 +150,6 @@ public class CoolComponents {
             return shape.contains(x, y);
         }
     }
-    public static class RoundButton extends JButton {
-        private Shape shape;
-        private Color backgroundColor = new Color(0);
-        private int cornerRadius;
-        public RoundButton(int cornerRadius) {
-            this.cornerRadius = cornerRadius;
-            setOpaque(false); // As suggested by @AVD in comment.
-            backgroundColor = Color.WHITE;
 
-        }
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D graphics = (Graphics2D) g;
 
-            graphics.setColor(backgroundColor);
-
-            Dimension arcs = new Dimension(cornerRadius, cornerRadius);
-            int width = getWidth();
-            int height = getHeight();
-            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            //Draws the rounded panel with borders.
-
-            graphics.fillRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height); //paint background
-            graphics.drawRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height); //paint border
-
-        }
-        protected void paintBorder(Graphics g) {
-            Dimension arcs = new Dimension(cornerRadius, cornerRadius);
-            g.setColor(getForeground());
-            g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, arcs.width, arcs.height);
-        }
-        public boolean contains(int x, int y) {
-            if (shape == null || !shape.getBounds().equals(getBounds())) {
-                shape = new RoundRectangle2D.Float(0, 0, getWidth()-1, getHeight()-1, 15, 15);
-            }
-            return shape.contains(x, y);
-        }
-    }
 }

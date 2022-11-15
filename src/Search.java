@@ -5,7 +5,7 @@ import static java.lang.Character.toLowerCase;
 
 public class Search {
     static int MAX_SEARCH_TERM = 20;
-
+    //-------------- stolen from my app store project --------
     public static ArrayList<Breakfast> SearchBreakfast(String searchTerm, ArrayList<Breakfast> apps){
         //LinkedHasSet is being used because I need a list that doesn't have duplicates but also remains ordered
         LinkedHashSet<Breakfast> matchingEntries = new LinkedHashSet<>();

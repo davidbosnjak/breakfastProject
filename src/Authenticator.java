@@ -10,9 +10,12 @@ import java.util.Scanner;
 
 public class Authenticator {
 
+    //method to check if username and passwords exists in file
     public static boolean Authenticate(String userName, String password){
+        //read in file
         File file = new File("src/accounts.txt");
         try {
+            //look through file and see if there is a match
             Scanner scanner = new Scanner(file);
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
@@ -31,7 +34,7 @@ public class Authenticator {
         }
     }
     public static void makeAccount(String userName, String password){
-        //add to database
+        //add to file
         String userInfo = userName+" "+password+"\n";
         try {
             Files.write(Paths.get("src/accounts.txt"), userInfo.getBytes(), StandardOpenOption.APPEND);

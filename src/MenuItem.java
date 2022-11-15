@@ -1,6 +1,9 @@
+import java.awt.*;
+
+//menu item class
 public class MenuItem {
 
-
+    //instance variables for important information
     private boolean largeServing;
     private int eggs;
     private int largeButter;
@@ -9,7 +12,20 @@ public class MenuItem {
     private int largeMilk;
     private int tbspButter;
     private String name;
+    private Color color;
+    private boolean setColor = false;
+    //default constructor
+    MenuItem(){
+        name = "unknown";
+        this.eggs = 1;
+        this.cupsOfMilk = 1;
+        this.tbspButter =1;
+        cost = 5;
+        largeMilk = cupsOfMilk +2;
+        largeButter = tbspButter+2;
+    }
 
+    //constructor with name param
     MenuItem(String name){
         this.name = name;
         this.eggs = 1;
@@ -19,10 +35,8 @@ public class MenuItem {
         largeMilk = cupsOfMilk +2;
         largeButter = tbspButter+2;
     }
-        MenuItem(String name, boolean largeServing){
-        this.name = name;
-        this.largeServing = largeServing;
-    }
+
+    //important constructor with 5 parameters
 
     MenuItem(String name, int eggs, double cost, int cupsOfMilk, int tbspButter){
         this.name = name;
@@ -33,7 +47,15 @@ public class MenuItem {
     }
 
 
+    //getters and setters
+    public Color getColor() {
+        return color;
+    }
 
+    public void setColor(Color color) {
+        this.color = color;
+        setColor = true;
+    }
     public boolean isLargeServing() {
         return largeServing;
     }
@@ -52,6 +74,16 @@ public class MenuItem {
 
     public double getCost() {
         return cost;
+    }
+
+    public int getLargeMilk(){
+        return cupsOfMilk+2;
+    }
+    public int getLargeButter(){
+        return tbspButter+2;
+    }
+    public int getLargeEggs(){
+        return eggs+2;
     }
 
     public void setCost(double cost) {
@@ -81,6 +113,14 @@ public class MenuItem {
     public void setName(String name) {
         this.name = name;
     }
+    public boolean isSetColor() {
+        return setColor;
+    }
+
+    public void setSetColor(boolean setColor) {
+        this.setColor = setColor;
+    }
+    //html tostring method which didnt end up getting used because i couldnt find a way to get even spacing so i instead used different labels
     public String toString(){
 
         String htmlString = "<html><span style=\"font-family:Arial;font-size:13px;\">Item: "+name+"&nbsp;&nbsp;&nbsp; Eggs: "+eggs+"/"+eggs+2+" &nbsp;&nbsp;&nbsp;" +
@@ -88,6 +128,7 @@ public class MenuItem {
 
         return htmlString;
     }
+
 
 
 }
