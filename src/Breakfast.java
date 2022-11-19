@@ -122,14 +122,10 @@ public class Breakfast {
 
 
 
-    //toString method which didnt end up getting used due to spacing issues which weren't figured out
     public String toString(){
-        String portion = bigEaters ? "large" : "regular";
-        String centeringString = "&nbsp;".repeat(10-partyName.length());
 
-        String htmlString = "<html><span style=\"font-family:Arial;font-size:13px;\">Reservation: "+partyName+ centeringString +numOfPeople+
-                "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Portion:"+portion+" <br> Meal: "+menuItem.getName()+" &nbsp;&nbsp;&nbsp;&nbsp; Cost: "+calcCost()+" </html>";
-        return htmlString;
+
+        return partyName+" "+bigEaters+" "+numOfPeople+" "+menuItem.getName()+" "+menuItem.getEggs()+" "+menuItem.getCost()+" "+menuItem.getCupsOfMilk()+" "+menuItem.getTbspButter()+"\n";
     }
 
 

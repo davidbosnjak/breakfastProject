@@ -20,6 +20,11 @@ public class UserInterface {
     //global variables because it was impossible for me to pass them around as parameters
     static String currentUser;
     static JScrollBar scrollBar = new JScrollBar();
+    static ArrayList<Breakfast> breakfastList = new ArrayList<>();
+    static ArrayList<MenuItem> menuItems = new ArrayList<>();
+
+
+
 
     //main method
     public static void main(String[] args) {
@@ -164,6 +169,7 @@ public class UserInterface {
     public static void mainProgram(JFrame loginFrame, JPanel loginPanel) {
         //making frame and panel
         JFrame mainFrame = new JFrame();
+        mainFrame.setTitle("Reservation Pro ");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JLayeredPane mainPane = new JLayeredPane();
@@ -236,22 +242,44 @@ public class UserInterface {
         makeReservationButton.setContentAreaFilled(true);
         makeReservationButton.setOpaque(true);
         makeReservationButton.setBackground(Color.decode("#95a5a6"));
+
         JButton reservations = new JButton("Reservations");
         reservations.setBorderPainted(false);
         reservations.setFocusPainted(false);
         reservations.setContentAreaFilled(true);
         reservations.setOpaque(true);
         reservations.setBackground(Color.decode("#95a5a6"));
+
         JButton logoutButton = new JButton("Log out");
         logoutButton.setBorderPainted(false);
         logoutButton.setContentAreaFilled(false);
         logoutButton.setOpaque(true);
         logoutButton.setBackground(Color.decode("#95a5a6"));
         sidePanel.add(logoutButton);
+
+        JButton exportButton = new JButton("Export Information");
+        exportButton.setBorderPainted(false);
+        exportButton.setContentAreaFilled(false);
+        exportButton.setOpaque(true);
+        exportButton.setBackground(Color.decode("#95a5a6"));
+        sidePanel.add(exportButton);
+
+        JButton importButton = new JButton("Import Information");
+        importButton.setBorderPainted(false);
+        importButton.setContentAreaFilled(false);
+        importButton.setOpaque(true);
+        importButton.setBackground(Color.decode("#95a5a6"));
+        sidePanel.add(importButton);
+
+
+
         //adding actions listener to logout button. when pressed, close the window and open the login
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                //clear the lists
+                breakfastList.removeAll(breakfastList);
+                menuItems.removeAll(menuItems);
                 mainFrame.dispose();
                 try {
                     login(loginFrame,loginPanel);
@@ -274,6 +302,7 @@ public class UserInterface {
         addItem.setBounds(1100,180,40,40);
         addItem.setBorderPainted(false);
         addItem.setFocusPainted(true);
+        addItem.setOpaque(true);
         addItem.setContentAreaFilled(false);
         mainPane.add(addItem);
 
@@ -283,26 +312,29 @@ public class UserInterface {
         displayMenu.setContentAreaFilled(true);
         displayMenu.setBackground(Color.decode("#95a5a6"));
         sidePanel.add(makeReservationButton);
+
+
+
         //setting bounds of buttons
         makeReservationButton.setBounds(20,240 , 200, 50);
         addMenuItemButton.setBounds(20,320,200,50);
-        logoutButton.setBounds(20,400,200,50);
+        logoutButton.setBounds(20,560,200,50);
         reservations.setBounds(20,80,200,50);
         displayMenu.setBounds(20, 160, 200, 50);
+        exportButton.setBounds(20,480,200,50);
+        importButton.setBounds(20,400,200,50);
 
 
-        //example
+        //example orders
 
         Breakfast breakfast2 = new Breakfast("David", true, 10,  new MenuItem("Pancakes"));
         Breakfast breakfast3 = new Breakfast("Max", false, 2,  new MenuItem("Eggs"));
-        Breakfast breakfast4 = new Breakfast("Met", true, 10,  new MenuItem("Pancakes"));
         Breakfast breakfast5 = new Breakfast("Mehmet", false, 4, new MenuItem("Pancakes"));
-        ArrayList<Breakfast> breakfastList = new ArrayList<>();
         breakfastList.add(breakfast2);
-        breakfastList.add(breakfast4);
         breakfastList.add(breakfast3);
         breakfastList.add(breakfast5);
-        ArrayList<MenuItem> menuItems = new ArrayList<>();
+
+        //example items
         MenuItem menuItem = new MenuItem("Eggs");
         MenuItem menuItem2 = new MenuItem("Pancakes");
         menuItems.add(menuItem2);
@@ -336,6 +368,48 @@ public class UserInterface {
 
             }
         });
+
+        //action listener for the export button
+        exportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JFileChooser chooser = new JFileChooser();
+                chooser.setFileSelectionMode(JFileChooser.APPROVE_OPTION);
+                chooser.setDialogTitle("Save export file");
+                chooser.setMultiSelectionEnabled(false);
+                System.out.println("here");
+                int result = chooser.showOpenDialog(null);
+
+                File file = new File(chooser.getSelectedFile().getAbsolutePath());
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                System.out.println("here");
+
+                Parser.addInfoToFile(file, breakfastList, menuItems);
+            }
+        });
+        importButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JFileChooser chooser = new JFileChooser();
+                chooser.setFileSelectionMode(JFileChooser.APPROVE_OPTION);
+                chooser.setDialogTitle("Choose import file");
+                chooser.setMultiSelectionEnabled(false);
+                int result = chooser.showOpenDialog(null);
+
+                File file = new File(chooser.getSelectedFile().getAbsolutePath());
+
+
+                MenuAndReservations menuAndReservations=Parser.parseFileIntoLists(file);
+                breakfastList = menuAndReservations.breakfasts;
+                menuItems = menuAndReservations.menuItems;
+                displayOrders(breakfastList,breakfastList, mainFramePanel, mainPane,mainLabel);
+            }
+        });
+
 
         //displaying orders
         displayOrders(breakfastList,breakfastList, mainFramePanel, mainPane, mainLabel);
@@ -395,6 +469,8 @@ public class UserInterface {
         mainPanel.removeAll();
         scrollBar.setMaximum(items.size()*8);
         scrollBar.setVisible(items.size()>4);
+        if(!scrollBar.isVisible()){scrollBar.setValue(0);}
+
         int i=1;
         //loop through all menus in the list and display them by adding them to one panel
         for(MenuItem menuitem : items){
@@ -413,6 +489,7 @@ public class UserInterface {
         mainPanel.removeAll();
         scrollBar.setMaximum(breakfasts.size()*8);
         scrollBar.setVisible(breakfasts.size()>4);
+        if(!scrollBar.isVisible()){scrollBar.setValue(0);}
         //same idea as displayMenu
         for (Breakfast breakfast : breakfasts) {
             mainPanel.add(displayItem(breakfast, i, breakfasts, total,mainPanel, pane, mainLabel));
@@ -440,16 +517,16 @@ public class UserInterface {
         displayPanel.setBounds(300, num * 100, 900, 80);
         JLabel itemNameLabel = new JLabel(menuItem.getName());
         JPanel tagPanel = new JPanel(null);
-        tagPanel.setBounds(0,0,20,60);
+        tagPanel.setBounds(1,1,20,60);
         tagPanel.setBackground(menuItem.getColor());
         displayPanel.add(tagPanel);
         Font goodFont = new Font("Serif", Font.BOLD, 20);
         itemNameLabel.setFont(goodFont);
         itemNameLabel.setBounds(80, 0, 500, 50);
 
-        JLabel ingredientLabel = new JLabel("Ingredients: Milk cups: "+menuItem.getCupsOfMilk()+"/"+menuItem.getLargeMilk()+"       Butter tablespoons: " +menuItem.getTbspButter()+"/"+menuItem.getLargeButter()+"        Eggs: "+menuItem.getEggs()+"/"+menuItem.getLargeEggs());
+        JLabel ingredientLabel = new JLabel("Ingredients: Milk cups: "+menuItem.getCupsOfMilk()+"|"+menuItem.getLargeMilk()+" Cost: $"+ menuItem.getCost()+"   Butter: " +menuItem.getTbspButter()+"|"+menuItem.getLargeButter()+"     Eggs: "+menuItem.getEggs()+"|"+menuItem.getLargeEggs());
         ingredientLabel.setFont(new Font("Serif", Font.BOLD,15));
-        ingredientLabel.setBounds(300,0,500,50);
+        ingredientLabel.setBounds(200,0,500,50);
         JButton deleteImageLabel = new JButton();
         deleteImageLabel.setBorderPainted(false);
         deleteImageLabel.setFocusPainted(false);
@@ -468,6 +545,7 @@ public class UserInterface {
                 //remove it from both lists, the currently displayed ones and the total list
                 items.remove(menuItem);
                 total.remove(menuItem);
+
                 //display the new menu
                 displayMenu(total,items, mainPanel, pane, mainLabel);
                 System.out.println(items.size());
@@ -669,7 +747,7 @@ public class UserInterface {
         displayPanel.setBounds(300, num * 100, 900, 80);
         JPanel tagPanel  = new JPanel(null);
         tagPanel.setBackground(breakfast.getColor());
-        tagPanel.setBounds(0,0,20,60);
+        tagPanel.setBounds(1,1,20,60);
 
         displayPanel.add(tagPanel);
         Font regularFont = new Font("Serif", Font.BOLD, 15);

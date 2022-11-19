@@ -120,13 +120,10 @@ public class MenuItem {
     public void setSetColor(boolean setColor) {
         this.setColor = setColor;
     }
-    //html tostring method which didnt end up getting used because i couldnt find a way to get even spacing so i instead used different labels
     public String toString(){
 
-        String htmlString = "<html><span style=\"font-family:Arial;font-size:13px;\">Item: "+name+"&nbsp;&nbsp;&nbsp; Eggs: "+eggs+"/"+eggs+2+" &nbsp;&nbsp;&nbsp;" +
-                "&nbsp; Butter: "+tbspButter+"/"+largeButter+" <br> Milk: "+cupsOfMilk+"/"+largeMilk+" &nbsp;&nbsp;&nbsp; Cost: "+cost+"</span></html>";
+        return name+" "+eggs+" "+cost+" "+cupsOfMilk+" "+largeButter+"\n";
 
-        return htmlString;
     }
 
 
